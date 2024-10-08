@@ -1,17 +1,22 @@
 import React from "react";
-import { Counter } from "./Counter.js";
+import { ImageTable } from "./components/imageTable/imageTable";
+import SearchImage from "./components/searchImage/search";
+import { Logout } from "@/components/Logout";
 
 export default function Page() {
   return (
     <>
-      <h1 className="font-bold text-3xl pb-4">My Vike app</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
+      {/* AppBar */}
+      <div className="flex items-center justify-between mb-4">
+        <div className=""></div>
+
+        <div className="flex gap-2">
+          <SearchImage />
+          <Logout />
+        </div>
+      </div>
+
+      <ImageTable />
     </>
   );
 }
