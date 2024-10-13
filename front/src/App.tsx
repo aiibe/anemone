@@ -1,22 +1,30 @@
-import { useState } from "react";
+import { Route, Switch } from "wouter";
+
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { Layout } from "./components/Layout";
 
+import { Login } from "@/features/auth/views/Login";
+import { Home } from "./features/home/view/Home";
+import { Private } from "./features/private/view/Private";
+import { AuthRoutes } from "./features/AuthRoutes";
+
+function App() {
   return (
-    <>
-      <div></div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Layout>
+      <Switch>
+        <Route path="/login" component={Login} />
+
+        <AuthRoutes>
+          <Route path="/" component={Home} />
+          <Route path="/private" component={Private} />
+
+          {/* 404 - Match all other routes except exactly '/' */}
+          {/* TODO 404 view */}
+          <Route path={/^\/(?!$)[^/]+/}>Not found</Route>
+        </AuthRoutes>
+      </Switch>
+    </Layout>
   );
 }
 
