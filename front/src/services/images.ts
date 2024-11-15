@@ -68,7 +68,7 @@ export const getDetails: (
       method: "GET",
       headers: {
         Authorization: `Basic ${token}`,
-        Accept: `application/vnd.docker.distribution.manifest.v2+json`,
+        Accept: `application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.index.v1+json`,
       },
     });
     if (response.ok) {
