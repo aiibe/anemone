@@ -49,7 +49,7 @@ export function ImageTable() {
       const tagsWithSize = await Promise.all(
         tags.map(async (tag) => {
           const { layers } = await getDetails(imageName, tag);
-          const size = layers.reduce((acc, layer) => acc + layer.size, 0);
+          const size = layers?.reduce((acc, layer) => acc + layer.size, 0) || 0;
           return { version: tag, size };
         })
       );
