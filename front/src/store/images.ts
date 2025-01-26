@@ -1,9 +1,14 @@
-import React from "react";
+import * as React from "react";
 import { create } from "zustand";
 
+import type { TagDockerDetails } from "@/services/images";
+
 export interface DockerTag {
-  version: string;
-  size?: number;
+  name: string;
+  type: "docker" | "oci";
+  manifests: (TagDockerDetails & {
+    platform?: { architecture: string; os: string };
+  })[];
 }
 
 export interface DockerImage {

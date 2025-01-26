@@ -28,14 +28,15 @@ export const TagTable = (props: Props) => {
         <Table className="ml-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Tag Version</TableHead>
-              <TableHead>Size</TableHead>
+              <TableHead>Version</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Manifests</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            {sortTags.map((tag) => (
-              <TagTableRow key={tag.version} {...tag} />
+            {sortTags.map((tag, index) => (
+              <TagTableRow key={`${tag.name}-${index}`} {...tag} />
             ))}
           </TableBody>
         </Table>

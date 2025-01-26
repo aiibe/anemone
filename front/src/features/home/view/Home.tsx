@@ -7,8 +7,10 @@ export const Home = () => {
     <>
       {/* AppBar */}
       <div className="flex items-center justify-between mb-4">
-        <div className=""></div>
+        {/* Left */}
+        <div></div>
 
+        {/* Right */}
         <div className="flex gap-2">
           <SearchImage />
           <Logout />

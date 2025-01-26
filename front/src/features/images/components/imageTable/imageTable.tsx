@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { useImageActions, useImages } from "@/store/images";
-import { getImageList, getDetails, getTags } from "@/services/images";
+import { getImageList, getTagList } from "@/services/images";
 import {
   Table,
   TableBody,
@@ -11,12 +11,14 @@ import {
 import { TagTable } from "../tagTable/tagTable";
 import { ImageTableRow } from "./imageTableRow";
 import { useSearchStore } from "../search/store";
+import { getTagManifests } from "../tagTable/tagTable.helpers";
 
 export function ImageTable() {
   const images = useImages();
   const { addRecord } = useImageActions();
   const searchQuery = useSearchStore((state) => state.searchQuery);
 
+  // Filter the images based on the search query
   const filteredImages = React.useMemo(() => {
     if (!searchQuery) return images;
     return images.filter((image) =>
@@ -26,6 +28,9 @@ export function ImageTable() {
 
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 
+  /**
+   * Fetch the list of images and add them to the store
+   */
   React.useEffect(() => {
     async function loadImages() {
       const { repositories } = await getImageList();
@@ -40,26 +45,27 @@ export function ImageTable() {
     loadImages();
   }, [addRecord]);
 
+  /**
+   * Toggle the expansion of a row
+   */
   const toggleRow = React.useCallback(
     async (imageName: string, isExpanded: boolean) => {
       setExpandedRows((prev) => ({ ...prev, [imageName]: !prev[imageName] }));
 
       if (isExpanded) return;
-      const { name, tags } = await getTags(imageName);
+      const { name, tags } = await getTagList(imageName);
+
       const tagsWithSize = await Promise.all(
-        tags.map(async (tag) => {
-          const { layers } = await getDetails(imageName, tag);
-          const size = layers.reduce((acc, layer) => acc + layer.size, 0);
-          return { version: tag, size };
-        })
+        tags.map(async (tag) => await getTagManifests(imageName, tag))
       );
+
       addRecord([{ name, tags: tagsWithSize }]);
     },
     [addRecord]
   );
 
   return (
-    <div className="container mx-auto">
+    <div id="image-table" className="container">
       <h1 className="text-2xl font-bold mb-4">Images</h1>
 
       <Table>

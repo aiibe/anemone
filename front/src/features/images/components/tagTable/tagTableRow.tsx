@@ -1,17 +1,19 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import { formatBytes } from "@/utils/formatBytes";
+
+import { TagManifestList } from "./tagManifestList";
 
 import type { DockerTag } from "@/store/images";
 
-type Props = DockerTag & {};
-
-export const TagTableRow = (props: Props) => {
-  const { version, size } = props;
+export const TagTableRow = (props: DockerTag) => {
+  const { name, type, manifests } = props;
 
   return (
     <TableRow>
-      <TableCell>{version}</TableCell>
-      <TableCell>{formatBytes(size || 0)}</TableCell>
+      <TableCell>{name}</TableCell>
+      <TableCell>{type}</TableCell>
+      <TableCell>
+        <TagManifestList manifests={manifests} />
+      </TableCell>
     </TableRow>
   );
 };
