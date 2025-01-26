@@ -4,12 +4,11 @@ import (
 	"embed"
 	"flag"
 	"fmt"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"net/http/httputil"
 	"net/url"
 	"strings"
-
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 // Embed static files into the binary
@@ -24,6 +23,7 @@ var (
 
 func main() {
 	e := echo.New()
+	e.HideBanner = true
 
 	// CORS middleware
 	e.Use(middleware.CORS())
