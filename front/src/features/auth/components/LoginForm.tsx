@@ -100,7 +100,7 @@ export const LoginForm = () => {
         />
       </div>
 
-      <Button type="submit" className="w-full bg-blue-500">
+      <Button type="submit" className="w-full">
         Login
       </Button>
     </form>
