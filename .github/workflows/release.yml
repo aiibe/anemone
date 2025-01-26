@@ -1,0 +1,40 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger on tags like v1.0.0
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Build frontend and backend
+      - name: Build front and back
+        run: |
+          cd front
+          yarn
+          yarn build
+          cd ../back
+          go build -o anemone main.go
+
+      #  Prepare release artifacts
+      - name: Prepare release artifacts
+        run: |
+          mkdir release
+          cp back/anemone release/
+          zip -r release-artifacts.zip release
+
+      # Create GitHub Release and upload assets
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          files: release-artifacts.zip
