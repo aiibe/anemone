@@ -73,7 +73,7 @@ export const LoginForm = () => {
 
   return (
     <form
-      className="bg-white p-6 rounded shadow-md w-80"
+      className="bg-white p-6 rounded shadow-md w-80 mx-auto"
       onSubmit={handleLogin}
     >
       <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>

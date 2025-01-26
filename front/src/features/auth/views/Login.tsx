@@ -9,7 +9,7 @@ export const Login = () => {
   if (auth) return <Redirect to="/" />;
 
   return (
-    <div id="view-login" className="">
+    <div id="view-login">
       <LoginForm />
     </div>
   );
