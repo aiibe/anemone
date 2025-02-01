@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { CopyToClipboard } from "./copyToClipboard";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface Props {
   name: string;
@@ -23,9 +23,9 @@ export const ImageTableRow = (props: Props) => {
       <TableCell>
         <Button variant="ghost" size="sm" onClick={() => toggleRow(name)}>
           {isExpanded ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
             <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
           )}
         </Button>
       </TableCell>

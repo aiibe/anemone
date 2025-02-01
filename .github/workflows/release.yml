@@ -1,0 +1,61 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger on tags
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23.3"
+
+      # Build frontend
+      - name: Build frontend
+        run: |
+          cd front
+          yarn
+          yarn build
+
+      # Build backend for macOS amd64
+      - name: Build backend for macOS amd64
+        run: |
+          cd back
+          GOOS=darwin GOARCH=amd64 go build -o anemone main.go
+          zip anemone-darwin-amd64-${{ github.ref_name }}.zip anemone
+
+      # Build backend for macOS arm64
+      - name: Build backend for macOS arm64
+        run: |
+          cd back
+          GOOS=darwin GOARCH=arm64 go build -o ../release/mac/arm64/anemone main.go
+          zip anemone-darwin-arm64-${{ github.ref_name }}.zip anemone
+
+      # Build backend for Linux amd64
+      - name: Build backend for Linux amd64
+        run: |
+          cd back
+          GOOS=linux GOARCH=amd64 go build -o ../release/linux/amd64/anemone main.go
+          zip anemone-linux-amd64-${{ github.ref_name }}.zip anemone
+
+      # Create GitHub Release and upload assets
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+          name: "${{ github.ref_name }}"
+          artifacts: |
+            back/anemone-darwin-amd64-${{ github.ref_name }}.zip
+            back/anemone-darwin-arm64-${{ github.ref_name }}.zip
+            back/anemone-linux-amd64-${{ github.ref_name }}.zip
