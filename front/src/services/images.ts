@@ -135,3 +135,24 @@ export const getDigestDetails: (
     console.log((error as Error).message);
   }
 };
+
+// Delete image by its tag
+export const deleteImage = async (repo: string, tag: string) => {
+  const token = useAuthStore.getState().token;
+  try {
+    const response = await fetch(`api/v2/${repo}/manifests/${tag}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Basic ${token}`,
+        Accept: `${MEDIA_TYPE.DOCKER}, ${MEDIA_TYPE.OCI}`,
+      },
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error("Failed to delete image");
+    }
+  } catch (error) {
+    console.log((error as Error).message);
+  }
+};

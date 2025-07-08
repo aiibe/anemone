@@ -31,12 +31,17 @@ export const TagTable = (props: Props) => {
               <TableHead>Version</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Manifests</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {sortTags.map((tag, index) => (
-              <TagTableRow key={`${tag.name}-${index}`} {...tag} />
+              <TagTableRow
+                key={`${tag.name}-${index}`}
+                imageName={imageName}
+                {...tag}
+              />
             ))}
           </TableBody>
         </Table>
