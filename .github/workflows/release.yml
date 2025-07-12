@@ -27,26 +27,9 @@ jobs:
           yarn
           yarn build
 
-      # Build backend for macOS amd64
-      - name: Build backend for macOS amd64
-        run: |
-          cd back
-          GOOS=darwin GOARCH=amd64 go build -o release/mac/amd64/anemone main.go
-          zip anemone-darwin-amd64-${{ github.ref_name }}.zip release/mac/amd64/anemone
-
-      # Build backend for macOS arm64
-      - name: Build backend for macOS arm64
-        run: |
-          cd back
-          GOOS=darwin GOARCH=arm64 go build -o release/mac/arm64/anemone main.go
-          zip anemone-darwin-arm64-${{ github.ref_name }}.zip release/mac/arm64/anemone
-
-      # Build backend for Linux amd64
-      - name: Build backend for Linux amd64
-        run: |
-          cd back
-          GOOS=linux GOARCH=amd64 go build -o release/linux/amd64/anemone main.go
-          zip anemone-linux-amd64-${{ github.ref_name }}.zip release/linux/amd64/anemone
+      # Build backend binaries
+      - name: Build backend binaries
+        run: VERSION=${{ github.ref_name }} back/build.sh
 
       # Create GitHub Release and upload assets
       - name: Create GitHub Release
@@ -56,6 +39,7 @@ jobs:
           tag: ${{ github.ref_name }}
           name: "${{ github.ref_name }}"
           artifacts: |
-            back/anemone-darwin-amd64-${{ github.ref_name }}.zip
-            back/anemone-darwin-arm64-${{ github.ref_name }}.zip
-            back/anemone-linux-amd64-${{ github.ref_name }}.zip
+            back/anemone-${{ github.ref_name }}-darwin-amd64.zip
+            back/anemone-${{ github.ref_name }}-darwin-arm64.zip
+            back/anemone-${{ github.ref_name }}-linux-amd64.zip
+            back/anemone-${{ github.ref_name }}-linux-arm64.zip
